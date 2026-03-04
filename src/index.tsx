@@ -1,4 +1,3 @@
-import React from "react";
 import {
   definePlugin,
   PanelSection,
@@ -9,7 +8,7 @@ import {
   ButtonItem,
 } from "@decky/ui";
 import { callable } from "@decky/api";
-import { useEffect, useState, VFC } from "react";
+import React, { useEffect, useState } from "react";
 import { FaGamepad } from "react-icons/fa";
 
 // Backend API methods
@@ -19,7 +18,7 @@ const setGain = callable<[number], number>("set_gain");
 const setInterval = callable<[number], number>("set_interval");
 const getDeviceStatus = callable<[void], { device_path: string | null; device_exists: boolean; binary_path: string | null; binary_exists: boolean }>("get_device_status");
 
-const Content: VFC = () => {
+function Content() {
   const [enabled, setEnabledState] = useState<boolean>(true);
   const [gain, setGainState] = useState<number>(60);
   const [interval, setIntervalState] = useState<number>(2);
