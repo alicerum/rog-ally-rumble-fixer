@@ -113,25 +113,24 @@ class Plugin:
                 for device in by_id_path.iterdir():
                     if "event-joystick" in device.name:
                         self.device_path = str(device.resolve())
-                        decky.logger.info(f"Detected device: {self.device_path}")
                         return
             
             # Fallback: check /dev/input/event*
             for event_dev in sorted(Path("/dev/input").glob("event*")):
                 self.device_path = str(event_dev)
-                decky.logger.info(f"Using fallback device: {self.device_path}")
                 return
-                
-            decky.logger.error("No joystick device found")
-        except Exception as e:
-            decky.logger.error(f"Failed to detect device: {e}")
+        except Exception:
+            decky.logger.error("Failed to find joystick event device: {e}")
 
     async def _rumble_loop(self):
         """Background task that continuously sets rumble gain"""
         while self.running:
             try:
+                # Always re-detect device to handle sleep/resume device re-enumeration
+                await self._detect_device()
+                
                 if self.device_path and Path(self.device_path).exists():
-                    result = subprocess.run(
+                    subprocess.run(
                         [
                             str(self.binary_path),
                             str(self.device_path),
@@ -141,15 +140,9 @@ class Plugin:
                         text=True,
                         timeout=5
                     )
-                    if result.returncode != 0:
-                        decky.logger.warning(f"Rumble fixer error: {result.stderr}")
-                else:
-                    decky.logger.warning(f"Device not found: {self.device_path}")
-                    await self._detect_device()
-            except subprocess.TimeoutExpired:
-                decky.logger.warning("Rumble fixer timed out")
             except Exception as e:
-                decky.logger.error(f"Rumble loop error: {e}")
+                # Log errors but continue - we'll try again next interval
+                decky.logger.warning(f"Rumble loop error: {e}")
             
             # Wait for configured interval
             await asyncio.sleep(self.settings["interval_sec"])
