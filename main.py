@@ -50,26 +50,37 @@ class Plugin:
         decky.logger.info("ROG Ally Rumble Fixer uninstalling")
         await self.stop_rumble_fixer()
 
+    def _get_settings_path(self) -> Path:
+        """Get settings file path - use Decky's plugin settings directory"""
+        # DECKY_PLUGIN_SETTINGS_DIR is the correct constant
+        return Path(decky.DECKY_PLUGIN_SETTINGS_DIR) / "settings.json"
+
     async def _load_settings(self):
         """Load settings from disk"""
         try:
-            settings_path = Path(decky.DECKY_SETTINGS_DIR) / "rog-ally-rumble-fixer.json"
+            settings_path = self._get_settings_path()
+            decky.logger.info(f"Loading settings from: {settings_path}")
             if settings_path.exists():
                 import json
                 with open(settings_path, "r") as f:
                     loaded = json.load(f)
                     self.settings.update(loaded)
+                    decky.logger.info(f"Settings loaded: {self.settings}")
+            else:
+                decky.logger.info("No settings file found, using defaults")
         except Exception as e:
             decky.logger.error(f"Failed to load settings: {e}")
 
     async def _save_settings(self):
         """Save settings to disk"""
         try:
-            settings_path = Path(decky.DECKY_SETTINGS_DIR) / "rog-ally-rumble-fixer.json"
+            settings_path = self._get_settings_path()
+            decky.logger.info(f"Saving settings to: {settings_path}")
             settings_path.parent.mkdir(parents=True, exist_ok=True)
             import json
             with open(settings_path, "w") as f:
-                json.dump(self.settings, f)
+                json.dump(self.settings, f, indent=2)
+            decky.logger.info(f"Settings saved: {self.settings}")
         except Exception as e:
             decky.logger.error(f"Failed to save settings: {e}")
 

@@ -105,7 +105,7 @@ The zip file will be created at `build/rog-ally-rumble-fixer-1.0.0.zip`
 
 ### Recommended Settings
 
-- **Rumble Gain**: 60% (good balance between feedback and battery life)
+- **Rumble Gain**: 40%
 - **Update Interval**: 2 seconds (catches most InputPlumber overrides without excessive CPU usage)
 
 ## How It Works
