@@ -1,10 +1,10 @@
 {
   "name": "ROG Ally Rumble Fixer",
   "author": "waelys",
-  "flags": ["_root"],
+  "flags": ["root"],
   "api_version": 1,
   "publish": {
-    "tags": ["rog", "ally", "rumble", "haptic", "controller"],
+    "tags": ["rog", "ally", "rumble", "haptic", "controller", "root"],
     "description": "Fixes rumble intensity on ROG Ally X by continuously setting force feedback gain to prevent inputplumber from overriding it.",
     "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
   }

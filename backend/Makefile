@@ -11,6 +11,7 @@ all: $(OUT_DIR)/$(TARGET)
 $(OUT_DIR)/$(TARGET): $(SRC)
 	@mkdir -p $(OUT_DIR)
 	$(CC) $(CFLAGS) -o $@ $<
+	chmod 755 $@
 	@echo "Built: $@"
 
 clean:

@@ -1,7 +1,6 @@
 import os
 import asyncio
 import subprocess
-import glob
 from pathlib import Path
 
 import decky
@@ -34,8 +33,6 @@ class Plugin:
             decky.logger.error("Could not find rumble-fixer binary")
             return
         
-        decky.logger.info(f"Using binary: {self.binary_path}")
-        
         # Auto-detect device
         await self._detect_device()
         
@@ -62,7 +59,6 @@ class Plugin:
                 with open(settings_path, "r") as f:
                     loaded = json.load(f)
                     self.settings.update(loaded)
-                    decky.logger.info(f"Loaded settings: {self.settings}")
         except Exception as e:
             decky.logger.error(f"Failed to load settings: {e}")
 
@@ -74,7 +70,6 @@ class Plugin:
             import json
             with open(settings_path, "w") as f:
                 json.dump(self.settings, f)
-            decky.logger.info(f"Saved settings: {self.settings}")
         except Exception as e:
             decky.logger.error(f"Failed to save settings: {e}")
 
@@ -84,6 +79,11 @@ class Plugin:
         plugin_dir = Path(decky.DECKY_PLUGIN_DIR)
         binary = plugin_dir / "bin" / "rumble-fixer"
         if binary.exists():
+            # Ensure it's executable
+            import stat
+            current_mode = binary.stat().st_mode
+            if not (current_mode & stat.S_IXUSR):
+                binary.chmod(current_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
             return str(binary)
         
         # Check backend out directory (development)
@@ -122,10 +122,9 @@ class Plugin:
                 if self.device_path and Path(self.device_path).exists():
                     result = subprocess.run(
                         [
-                            self.binary_path,
-                            self.device_path,
-                            str(self.settings["gain_percent"]),
-                            "1"  # 1 second interval for the binary
+                            str(self.binary_path),
+                            str(self.device_path),
+                            str(self.settings["gain_percent"])
                         ],
                         capture_output=True,
                         text=True,
@@ -147,7 +146,6 @@ class Plugin:
     async def start_rumble_fixer(self):
         """Start the rumble fixer background task"""
         if self.rumble_task and not self.rumble_task.done():
-            decky.logger.info("Rumble fixer already running")
             return
         
         if not self.device_path:

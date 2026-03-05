@@ -1,7 +1,7 @@
 .PHONY: all clean build backend frontend zip
 
 PLUGIN_NAME = rog-ally-rumble-fixer
-VERSION = 1.0.0
+VERSION = 1.0.3
 BUILD_DIR = build
 DIST_DIR = $(BUILD_DIR)/$(PLUGIN_NAME)
 ZIP_NAME = $(PLUGIN_NAME)-$(VERSION).zip

@@ -5,10 +5,12 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
 int set_gain(const char *device, int gain_percent) {
     int fd = open(device, O_RDWR);
     if (fd < 0) {
+        fprintf(stderr, "Error: Failed to open device %s: %s\n", device, strerror(errno));
         return -1;
     }
     
@@ -21,9 +23,14 @@ int set_gain(const char *device, int gain_percent) {
     ie.value = gain_value;
     
     int result = write(fd, &ie, sizeof(ie));
-    close(fd);
+    if (result < 0) {
+        fprintf(stderr, "Error: Failed to write to device: %s\n", strerror(errno));
+        close(fd);
+        return -1;
+    }
     
-    return (result < 0) ? -1 : 0;
+    close(fd);
+    return 0;
 }
 
 int main(int argc, char *argv[]) {

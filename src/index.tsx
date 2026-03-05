@@ -165,7 +165,7 @@ function Content() {
       </PanelSectionRow>
     </PanelSection>
   );
-};
+}
 
 export default definePlugin(() => {
   console.log("ROG Ally Rumble Fixer plugin loaded");

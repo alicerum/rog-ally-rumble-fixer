@@ -20,18 +20,53 @@ This plugin continuously monitors and sets the force feedback gain on the contro
 
 ## Installation
 
-### From Decky Plugin Store
+### Quick Install (Terminal)
 
-1. Open Decky Loader on your ROG Ally X
-2. Go to the Plugin Store
-3. Search for "ROG Ally Rumble Fixer"
-4. Click Install
+Run this command in a terminal to automatically download and install the latest release:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/waelys/rog-ally-rumble-fixer/main/install.sh | bash
+```
+
+Or with `wget`:
+
+```bash
+wget -qO- https://raw.githubusercontent.com/waelys/rog-ally-rumble-fixer/main/install.sh | bash
+```
+
+**What the script does:**
+- Detects your Decky Loader installation (SteamOS or custom path)
+- Downloads the latest release from GitHub
+- Extracts it to the correct plugins directory
+- Cleans up temporary files
 
 ### Manual Installation
 
-1. Download the latest release ZIP file
-2. Extract it to `/home/deck/homebrew/plugins/rog-ally-rumble-fixer/`
-3. Restart Decky Loader or reload plugins
+1. Download the latest release ZIP file from the [Releases page](../../releases)
+2. Extract it to your Decky plugins directory:
+   ```bash
+   # For SteamOS
+   unzip rog-ally-rumble-fixer-*.zip -d /home/deck/homebrew/plugins/
+   
+   # For other systems
+   unzip rog-ally-rumble-fixer-*.zip -d ~/homebrew/plugins/
+   ```
+3. Restart Decky Loader (Settings → Restart Decky)
+4. Open Quick Access Menu (≡ button) and find "ROG Ally Rumble Fixer"
+
+### Uninstallation
+
+To remove the plugin:
+
+```bash
+# For SteamOS
+rm -rf /home/deck/homebrew/plugins/rog-ally-rumble-fixer/
+
+# For other systems
+rm -rf ~/homebrew/plugins/rog-ally-rumble-fixer/
+```
+
+Then restart Decky Loader.
 
 ## Building from Source
 
