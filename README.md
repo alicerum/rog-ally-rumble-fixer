@@ -25,13 +25,13 @@ This plugin continuously monitors and sets the force feedback gain on the contro
 Run this command in a terminal to automatically download and install the latest release:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/install.sh | sudo bash
 ```
 
 Or with `wget`:
 
 ```bash
-wget -qO- https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/install.sh | sudo bash
 ```
 
 **What the script does:**
