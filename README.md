@@ -28,28 +28,17 @@ Run this command in a terminal to automatically download and install the latest 
 curl -fsSL https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/install.sh | sudo bash
 ```
 
-Or with `wget`:
-
-```bash
-wget -qO- https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/install.sh | sudo bash
-```
-
 **What the script does:**
 - Detects your Decky Loader installation (SteamOS or custom path)
 - Downloads the latest release from GitHub
 - Extracts it to the correct plugins directory
-- Cleans up temporary files
 
 ### Manual Installation
 
 1. Download the latest release ZIP file from the [Releases page](../../releases)
 2. Extract it to your Decky plugins directory:
    ```bash
-   # For SteamOS
-   unzip rog-ally-rumble-fixer-*.zip -d /home/deck/homebrew/plugins/
-   
-   # For other systems
-   unzip rog-ally-rumble-fixer-*.zip -d ~/homebrew/plugins/
+   unzip rog-ally-rumble-fixer.zip -d ~/homebrew/plugins/
    ```
 3. Restart Decky Loader (Settings → Restart Decky)
 4. Open Quick Access Menu (≡ button) and find "ROG Ally Rumble Fixer"
@@ -59,10 +48,6 @@ wget -qO- https://raw.githubusercontent.com/alicerum/rog-ally-rumble-fixer/main/
 To remove the plugin:
 
 ```bash
-# For SteamOS
-rm -rf /home/deck/homebrew/plugins/rog-ally-rumble-fixer/
-
-# For other systems
 rm -rf ~/homebrew/plugins/rog-ally-rumble-fixer/
 ```
 
@@ -169,37 +154,9 @@ The `rumble-fixer` binary performs the actual ioctl operations. It's compiled fr
 
 This project is licensed under the BSD 2-Clause License - see the LICENSE file for details.
 
-## Acknowledgments
-
-- Original C implementation by waelys
-- Built for Decky Loader by the SteamDeckHomebrew community
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit issues or pull requests.
-
-## Releases
-
-### Automatic GitHub Releases
-
-This project uses GitHub Actions to automatically build and release the plugin:
-
-- **Push a tag** (`v*`) to trigger a release:
-  ```bash
-  git tag v1.0.0
-  git push origin v1.0.0
-  ```
-- The workflow will build the plugin and create a release with the zip file attached
-- Download the latest release from the [Releases page](../../releases)
-
-### Manual Release
-
-You can also build the release zip locally:
-```bash
-make zip
-```
-
-The zip file will be at `build/rog-ally-rumble-fixer-X.Y.Z.zip`
 
 ## Support
 
