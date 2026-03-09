@@ -33,9 +33,6 @@ class Plugin:
             decky.logger.error("Could not find rumble-fixer binary")
             return
         
-        # Auto-detect device
-        await self._detect_device()
-        
         # Start rumble fixer if enabled
         if self.settings["enabled"]:
             await self.start_rumble_fixer()
@@ -52,7 +49,6 @@ class Plugin:
 
     def _get_settings_path(self) -> Path:
         """Get settings file path - use Decky's plugin settings directory"""
-        # DECKY_PLUGIN_SETTINGS_DIR is the correct constant
         return Path(decky.DECKY_PLUGIN_SETTINGS_DIR) / "settings.json"
 
     async def _load_settings(self):
@@ -104,7 +100,7 @@ class Plugin:
         
         return None
 
-    async def _detect_device(self):
+    async def _detect_device(self) -> bool:
         """Auto-detect the joystick device"""
         try:
             # Look for devices with event-joystick in /dev/input/by-id/
@@ -112,23 +108,18 @@ class Plugin:
             if by_id_path.exists():
                 for device in by_id_path.iterdir():
                     if "event-joystick" in device.name:
-                        self.device_path = str(device.resolve())
-                        return
+                        self.device_path = str(device.absolute)
+                        return True
             
-            # Fallback: check /dev/input/event*
-            for event_dev in sorted(Path("/dev/input").glob("event*")):
-                self.device_path = str(event_dev)
-                return
+            decky.logger.error("No joystick event device found")
         except Exception:
             decky.logger.error("Failed to find joystick event device: {e}")
+        return False
 
     async def _rumble_loop(self):
         """Background task that continuously sets rumble gain"""
         while self.running:
             try:
-                # Always re-detect device to handle sleep/resume device re-enumeration
-                await self._detect_device()
-                
                 if self.device_path and Path(self.device_path).exists():
                     subprocess.run(
                         [
@@ -152,10 +143,7 @@ class Plugin:
         if self.rumble_task and not self.rumble_task.done():
             return
         
-        if not self.device_path:
-            await self._detect_device()
-        
-        if not self.device_path:
+        if not await self._detect_device():
             decky.logger.error("Cannot start rumble fixer: no device detected")
             return
         
