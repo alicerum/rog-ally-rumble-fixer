@@ -108,7 +108,7 @@ class Plugin:
             if by_id_path.exists():
                 for device in by_id_path.iterdir():
                     if "event-joystick" in device.name:
-                        self.device_path = str(device.absolute)
+                        self.device_path = str(device.absolute())
                         return True
             
             decky.logger.error("No joystick event device found")
